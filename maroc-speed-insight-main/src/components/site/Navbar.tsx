@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Moon, Sun, Menu, X, Gauge } from "lucide-react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -33,9 +33,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2 font-semibold">
-          <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <Gauge className="h-4 w-4" />
-          </div>
+          <img src="/logo.png" alt="NetSpeed Maroc Logo" className="h-8 w-8" />
           <span className="text-foreground">NetSpeed <span className="text-accent">Maroc</span></span>
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
