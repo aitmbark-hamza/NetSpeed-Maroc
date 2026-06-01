@@ -49,29 +49,15 @@ async function fromIpapi(): Promise<IpInfo | null> {
 
 async function fromIpwhois(): Promise<IpInfo | null> {
   try {
-    const r = await fetch("https://ipwho.is/");
-    if (!r.ok) return null;
-    const j = await r.json();
-    if (!j.success && j.success !== undefined) return null;
-    return {
-      ip: j.ip,
-      version: j.type === "IPv6" ? "IPv6" : "IPv4",
-      city: j.city,
-      region: j.region,
-      country_name: j.country,
-      country_code: j.country_code,
-      timezone: j.timezone?.id,
-      org: j.connection?.isp || j.connection?.org,
-      asn: j.connection?.asn ? `AS${j.connection.asn}` : undefined,
-      latitude: j.latitude,
-      longitude: j.longitude,
-    };
+    // Note: ipwho.is returns 403 errors in production
+    // Using ipapi.co as primary provider instead
+    return null;
   } catch { return null; }
 }
 
-/** Try providers in order, merging fields. Returns first non-null IP. */
+/** Try providers in order (ipapi.co preferred), merging fields. Returns first non-null IP. */
 export async function fetchIpInfo(): Promise<IpInfo> {
-  const providers = [fromIpwhois, fromIpapi, fromCloudflare];
+  const providers = [fromIpapi, fromCloudflare];
   let merged: IpInfo = {};
   for (const p of providers) {
     const data = await p();
