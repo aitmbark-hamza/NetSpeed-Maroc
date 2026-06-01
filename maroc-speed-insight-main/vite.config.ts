@@ -20,26 +20,27 @@ export default defineConfig({
         "node:stream",
       ],
       output: {
-        manualChunks: {
-          // Vendor chunks for better caching
-          vendor: ["react", "react-dom"],
-          router: ["@tanstack/react-router"],
-          query: ["@tanstack/react-query"],
+        manualChunks: (id) => {
+          // Vendor chunks
+          if (id.includes('node_modules/react') && !id.includes('node_modules/react-router')) return 'vendor-react';
+          if (id.includes('@tanstack/react-router')) return 'vendor-router';
+          if (id.includes('@tanstack/react-query')) return 'vendor-query';
+          if (id.includes('lucide-react')) return 'vendor-icons';
+          if (id.includes('framer-motion')) return 'vendor-animation';
           
-          // Non-critical routes in separate chunks
-          blog: ["./src/routes/blog.tsx", "./src/routes/blog.$slug.tsx"],
-          tools: ["./src/routes/tools.tsx", "./src/routes/categories.tsx"],
-          utilities: [
-            "./src/routes/about.tsx",
-            "./src/routes/contact.tsx",
-            "./src/routes/disclaimer.tsx",
-            "./src/routes/privacy-policy.tsx",
-            "./src/routes/terms-of-service.tsx",
-          ],
-          generators: [
-            "./src/routes/qr-generator.tsx",
-            "./src/routes/password-generator.tsx",
-          ],
+          // Route chunks - split each tool into separate chunk
+          if (id.includes('ip-checker')) return 'route-ip-checker';
+          if (id.includes('speed-test')) return 'route-speed-test';
+          if (id.includes('dns-lookup')) return 'route-dns-lookup';
+          if (id.includes('ping-test')) return 'route-ping-test';
+          if (id.includes('qr-generator')) return 'route-qr-generator';
+          if (id.includes('password-generator')) return 'route-password-generator';
+          if (id.includes('blog.tsx') || id.includes('blog.$slug')) return 'route-blog';
+          if (id.includes('about.tsx')) return 'route-about';
+          if (id.includes('contact.tsx')) return 'route-contact';
+          if (id.includes('tools.tsx') || id.includes('categories')) return 'route-tools';
+          
+          // Keep homepage + critical path in main
         },
       },
     },

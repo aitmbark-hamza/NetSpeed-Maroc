@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { memo } from "react";
 
-export function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+export const Reveal = memo(function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,4 +14,4 @@ export function Reveal({ children, delay = 0, className = "" }: { children: Reac
       {children}
     </motion.div>
   );
-}
+});

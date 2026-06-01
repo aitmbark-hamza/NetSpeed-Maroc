@@ -1,6 +1,16 @@
 import { Globe, Gauge, Search, Activity, QrCode, KeyRound } from "lucide-react";
 import { BLOG_ARTICLES, type Post } from "./blog-articles";
 
+// Exported for static routes (sitemap, blog index page)
+export const POSTS: Post[] = BLOG_ARTICLES;
+
+// Lazy load blog articles - only when needed for homepage preview
+export async function loadBlogArticles() {
+  return BLOG_ARTICLES;
+}
+
+export type { Post } from "./blog-articles";
+
 export const TOOLS = [
   {
     to: "/ip-checker" as const,
@@ -43,9 +53,8 @@ export const TOOLS = [
 
 export const PRIORITY_TOOLS = TOOLS.slice(0, 3);
 
-export type { Post };
-
-export const POSTS: Post[] = BLOG_ARTICLES;
+// Keep POSTS for backwards compatibility
+// Exported above for static/server-side usage
 
 export const FAQS = [
   {

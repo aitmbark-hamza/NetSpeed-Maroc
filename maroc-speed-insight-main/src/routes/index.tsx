@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Globe, Gauge, ShieldCheck, Zap, Cpu, Sparkles, MapPin, MousePointerClick, BarChart3, Lock, CheckCircle2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
-import { TOOLS, POSTS, FAQS } from "@/lib/tools";
+import { TOOLS, FAQS } from "@/lib/tools";
 import { fetchIpInfo, type IpInfo } from "@/lib/ip";
+import { BlogPreview } from "@/components/home/BlogPreview";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,10 +57,28 @@ function useIpInfo() {
   const [data, setData] = useState<IpInfo | null>(null);
   useEffect(() => {
     let cancelled = false;
-    fetchIpInfo()
-      .then((d) => { if (!cancelled) setData(d.ip ? d : { ip: "Unavailable" }); })
-      .catch(() => { if (!cancelled) setData({ ip: "Unavailable" }); });
-    return () => { cancelled = true; };
+    // Use requestIdleCallback to defer API call until after paint
+    const idleCallbackId = (typeof requestIdleCallback !== 'undefined' 
+      ? requestIdleCallback(() => {
+        fetchIpInfo()
+          .then((d) => { if (!cancelled) setData(d.ip ? d : { ip: "Unavailable" }); })
+          .catch(() => { if (!cancelled) setData({ ip: "Unavailable" }); });
+        })
+      : setTimeout(() => {
+        fetchIpInfo()
+          .then((d) => { if (!cancelled) setData(d.ip ? d : { ip: "Unavailable" }); })
+          .catch(() => { if (!cancelled) setData({ ip: "Unavailable" }); });
+        }, 2000) // fallback to setTimeout after 2s
+    ) as any;
+    
+    return () => { 
+      cancelled = true;
+      if (typeof idleCallbackId === 'number') {
+        if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(idleCallbackId);
+      } else {
+        clearTimeout(idleCallbackId);
+      }
+    };
   }, []);
   return data;
 }
@@ -208,29 +227,7 @@ function Home() {
       </Section>
 
       {/* Blog preview */}
-      <Section>
-        <Reveal>
-          <div className="mb-10 flex items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">From the blog</h2>
-              <p className="mt-3 text-muted-foreground">Guides and explainers on networking, WiFi and online security.</p>
-            </div>
-            <Link to="/blog" className="hidden text-sm font-medium text-primary hover:underline sm:inline">View all →</Link>
-          </div>
-        </Reveal>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {POSTS.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 0.05}>
-              <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40">
-                <span className="text-xs font-medium text-accent">{p.category}</span>
-                <h3 className="mt-3 text-base font-semibold leading-snug">{p.title}</h3>
-                <p className="mt-2 flex-1 text-sm text-muted-foreground">{p.excerpt}</p>
-                <span className="mt-4 text-xs text-muted-foreground">{p.readTime}</span>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
+      <BlogPreview />
 
       {/* FAQ */}
       <Section>
@@ -273,45 +270,53 @@ function Home() {
   );
 }
 
-function LiveIpWidget({ info }: { info: IpInfo | null }) {
+const LiveIpWidget = memo(function LiveIpWidget({ info }: { info: IpInfo | null }) {
   const flag = info?.country_code
     ? String.fromCodePoint(...info.country_code.toUpperCase().split("").map((c) => 127397 + c.charCodeAt(0)))
-    : "🌐";
+    : info === null ? "🌐" : "🌐";
+  
   return (
     <div className="rounded-3xl border border-border bg-card p-6 shadow-2xl shadow-primary/5 sm:p-8">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Live · Your connection</span>
-        <span className="inline-flex items-center gap-1.5 text-xs text-accent">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-accent" /> Online
+        <span className={`inline-flex items-center gap-1.5 text-xs ${info ? 'text-accent' : 'text-muted-foreground'}`}>
+          <span className={`h-2 w-2 rounded-full ${info ? 'animate-pulse bg-accent' : 'bg-muted'}`} /> 
+          {info ? 'Online' : 'Detecting…'}
         </span>
       </div>
       <div className="mt-6 flex items-center gap-4">
         <div className="grid h-14 w-14 place-items-center rounded-2xl bg-primary/10 text-2xl">{flag}</div>
         <div className="min-w-0">
-          <div className="truncate font-mono text-2xl font-semibold text-foreground sm:text-3xl">{info?.ip ?? "·····"}</div>
-          <div className="truncate text-sm text-muted-foreground">{info?.org ?? "Detecting ISP…"}</div>
+          <div className={`truncate font-mono text-2xl font-semibold sm:text-3xl ${info ? 'text-foreground' : 'text-muted-foreground/50'}`}>
+            {info?.ip ?? '···· ····'}
+          </div>
+          <div className={`truncate text-sm ${info ? 'text-muted-foreground' : 'text-muted-foreground/50'}`}>
+            {info?.org ?? 'Detecting ISP…'}
+          </div>
         </div>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-3">
-        <Stat icon={MapPin} label="Location" value={info ? `${info.city ?? "—"}, ${info.country_name ?? ""}` : "…"} />
-        <Stat icon={Globe} label="Country" value={info?.country_name ?? "…"} />
-        <Stat icon={ShieldCheck} label="VPN" value="Not detected" />
-        <Stat icon={Gauge} label="Type" value="IPv4" />
+        <Stat icon={MapPin} label="Location" value={info ? `${info.city ?? "—"}, ${info.country_name ?? ""}` : "…"} loading={!info} />
+        <Stat icon={Globe} label="Country" value={info?.country_name ?? "…"} loading={!info} />
+        <Stat icon={ShieldCheck} label="VPN" value="Not detected" loading={false} />
+        <Stat icon={Gauge} label="Type" value="IPv4" loading={false} />
       </div>
       <Link to="/ip-checker" className="mt-6 block">
         <Button className="w-full">View full IP details</Button>
       </Link>
     </div>
   );
-}
+});
 
-function Stat({ icon: Icon, label, value }: { icon: typeof Globe; label: string; value: string }) {
+const Stat = memo(function Stat({ icon: Icon, label, value, loading }: { icon: typeof Globe; label: string; value: string; loading?: boolean }) {
   return (
-    <div className="rounded-xl border border-border bg-background/40 p-3">
+    <div className={`rounded-xl border p-3 ${loading ? 'border-border/50 bg-background/20' : 'border-border bg-background/40'}`}>
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Icon className="h-3.5 w-3.5" /> {label}
       </div>
-      <div className="mt-1 truncate text-sm font-medium text-foreground">{value}</div>
+      <div className={`mt-1 truncate text-sm ${loading ? 'text-muted-foreground/50' : 'font-medium text-foreground'}`}>
+        {value}
+      </div>
     </div>
   );
-}
+});
