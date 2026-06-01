@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/password-generator")({
   head: () => ({
@@ -15,9 +16,9 @@ export const Route = createFileRoute("/password-generator")({
       { name: "description", content: "Generate strong, random and secure passwords with custom length and character sets. Free and private." },
       { property: "og:title", content: "Password Generator — NetSpeed Maroc" },
       { property: "og:description", content: "Create strong and secure passwords." },
-      { property: "og:url", content: "/password-generator" },
+      { property: "og:url", content: `${SITE_URL}/password-generator` },
     ],
-    links: [{ rel: "canonical", href: "/password-generator" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/password-generator` }],
   }),
   component: PasswordGenerator,
 });

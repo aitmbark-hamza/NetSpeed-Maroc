@@ -63,9 +63,9 @@ function Categories() {
                   <div className="space-y-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                        <h2 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
                           {cat.category}
-                        </h3>
+                        </h2>
                         <p className="mt-2 text-sm text-muted-foreground">
                           {cat.description}
                         </p>

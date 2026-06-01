@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/terms-of-service")({
   head: () => ({
@@ -9,9 +10,9 @@ export const Route = createFileRoute("/terms-of-service")({
       { name: "description", content: "The terms that govern your use of NetSpeed Maroc tools and services." },
       { property: "og:title", content: "Terms of Service — NetSpeed Maroc" },
       { property: "og:description", content: "Terms of service for NetSpeed Maroc." },
-      { property: "og:url", content: "/terms-of-service" },
+      { property: "og:url", content: `${SITE_URL}/terms-of-service` },
     ],
-    links: [{ rel: "canonical", href: "/terms-of-service" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/terms-of-service` }],
   }),
   component: Terms,
 });

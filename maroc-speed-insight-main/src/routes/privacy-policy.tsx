@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/privacy-policy")({
   head: () => ({
@@ -9,9 +10,9 @@ export const Route = createFileRoute("/privacy-policy")({
       { name: "description", content: "How NetSpeed Maroc handles your data: what we collect, what we don't, and your rights." },
       { property: "og:title", content: "Privacy Policy — NetSpeed Maroc" },
       { property: "og:description", content: "Our privacy policy in plain language." },
-      { property: "og:url", content: "/privacy-policy" },
+      { property: "og:url", content: `${SITE_URL}/privacy-policy` },
     ],
-    links: [{ rel: "canonical", href: "/privacy-policy" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/privacy-policy` }],
   }),
   component: Privacy,
 });

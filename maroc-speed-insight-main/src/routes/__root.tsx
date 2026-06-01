@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
+import { SITE_URL } from "../lib/config";
 
 function NotFoundComponent() {
   return (
@@ -80,14 +81,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "NetSpeed Maroc — Free Internet Tools, IP Checker & Speed Test" },
       { name: "description", content: "Free internet tools for Morocco: check your IP, run a speed test, inspect DNS, ping, generate QR codes and strong passwords." },
       { name: "author", content: "NetSpeed Maroc" },
+      { name: "theme-color", content: "#0f172a" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { property: "og:title", content: "NetSpeed Maroc — Free Internet Tools" },
       { property: "og:description", content: "Check your IP, ISP, location, run a speed test and more — instant, free, in your browser." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@NetSpeedMaroc" },
+      { name: "twitter:creator", content: "@NetSpeedMaroc" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
       // Removed Google Fonts - using system font stack for optimal performance
       // Font stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif
       // This ensures instant text rendering without font loading delay
@@ -96,6 +103,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         children:
           "(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':true;if(d)document.documentElement.classList.add('dark');}catch(e){document.documentElement.classList.add('dark');}})();",
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "NetSpeed Maroc",
+          url: SITE_URL,
+          logo: `${SITE_URL}/logo.svg`,
+          description: "Free internet tools for Morocco: check your IP, run a speed test, inspect DNS, ping, generate QR codes and strong passwords.",
+          sameAs: [
+            "https://twitter.com/NetSpeedMaroc",
+            "https://linkedin.com/company/netspeedmaroc",
+            "https://github.com/netspeedmaroc",
+          ],
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "Support",
+            email: "support@netspeedmaroc.com",
+          },
+        }),
       },
     ],
   }),
@@ -108,8 +136,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/logo.svg" />
         <HeadContent />
       </head>
       <body>

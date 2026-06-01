@@ -6,11 +6,11 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 Disallow: /*.json$
-Disallow: /*.xml$
-Disallow: *?*sort=
-Disallow: *?*filter=
 Disallow: /search?
 Disallow: /api/
+
+# Allow sitemap for search engines
+Allow: /sitemap.xml
 
 # Specific crawler rules
 User-agent: Googlebot

@@ -5,6 +5,7 @@ import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/dns-lookup")({
   head: () => ({
@@ -13,9 +14,9 @@ export const Route = createFileRoute("/dns-lookup")({
       { name: "description", content: "Free DNS lookup tool. Inspect A, AAAA, MX, TXT, NS and CNAME records for any domain instantly." },
       { property: "og:title", content: "DNS Lookup — NetSpeed Maroc" },
       { property: "og:description", content: "Inspect DNS records and domain information." },
-      { property: "og:url", content: "/dns-lookup" },
+      { property: "og:url", content: `${SITE_URL}/dns-lookup` },
     ],
-    links: [{ rel: "canonical", href: "/dns-lookup" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/dns-lookup` }],
   }),
   component: DnsLookup,
 });

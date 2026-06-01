@@ -5,6 +5,7 @@ import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/ping-test")({
   head: () => ({
@@ -13,9 +14,9 @@ export const Route = createFileRoute("/ping-test")({
       { name: "description", content: "Test your network latency to any host. Free, fast and accurate ping test running in your browser." },
       { property: "og:title", content: "Ping Test — NetSpeed Maroc" },
       { property: "og:description", content: "Analyze latency and network response time." },
-      { property: "og:url", content: "/ping-test" },
+      { property: "og:url", content: `${SITE_URL}/ping-test` },
     ],
-    links: [{ rel: "canonical", href: "/ping-test" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/ping-test` }],
   }),
   component: PingTest,
 });

@@ -4,6 +4,7 @@ import { Download, Upload, Activity, Play } from "lucide-react";
 import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/speed-test")({
   head: () => ({
@@ -12,9 +13,9 @@ export const Route = createFileRoute("/speed-test")({
       { name: "description", content: "Measure your download speed, upload speed and ping in real time with our free browser-based speed test." },
       { property: "og:title", content: "Speed Test — NetSpeed Maroc" },
       { property: "og:description", content: "Measure download, upload and ping in real time." },
-      { property: "og:url", content: "/speed-test" },
+      { property: "og:url", content: `${SITE_URL}/speed-test` },
     ],
-    links: [{ rel: "canonical", href: "/speed-test" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/speed-test` }],
   }),
   component: SpeedTest,
 });

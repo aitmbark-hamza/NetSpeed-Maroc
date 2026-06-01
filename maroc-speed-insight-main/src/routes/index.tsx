@@ -6,6 +6,7 @@ import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { TOOLS, FAQS } from "@/lib/tools";
+import { SITE_URL } from "@/lib/config";
 import { fetchIpInfo, type IpInfo } from "@/lib/ip";
 import { BlogPreview } from "@/components/home/BlogPreview";
 
@@ -17,10 +18,10 @@ export const Route = createFileRoute("/")({
       { name: "keywords", content: "what is my ip, ip address, speed test, internet speed, dns lookup, ping test, morocco internet tools" },
       { property: "og:title", content: "NetSpeed Maroc — Free Internet Tools" },
       { property: "og:description", content: "Free IP checker, speed test, DNS lookup and more. No signup, runs in your browser." },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: SITE_URL },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: SITE_URL }],
     scripts: [
       {
         type: "application/ld+json",
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "NetSpeed Maroc",
-          url: "/",
+          url: SITE_URL,
           potentialAction: {
             "@type": "SearchAction",
             target: "/blog?q={search_term_string}",

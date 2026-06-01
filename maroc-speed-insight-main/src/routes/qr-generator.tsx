@@ -6,6 +6,7 @@ import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/qr-generator")({
   head: () => ({
@@ -14,9 +15,9 @@ export const Route = createFileRoute("/qr-generator")({
       { name: "description", content: "Generate QR codes instantly from any URL or text. Download as PNG, free and unlimited." },
       { property: "og:title", content: "QR Generator — NetSpeed Maroc" },
       { property: "og:description", content: "Generate QR codes instantly for links and text." },
-      { property: "og:url", content: "/qr-generator" },
+      { property: "og:url", content: `${SITE_URL}/qr-generator` },
     ],
-    links: [{ rel: "canonical", href: "/qr-generator" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/qr-generator` }],
   }),
   component: QrGenerator,
 });

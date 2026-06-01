@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout, Section } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -9,9 +10,9 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "NetSpeed Maroc is a free internet tools platform built for Morocco — fast, private, and reliable." },
       { property: "og:title", content: "About NetSpeed Maroc" },
       { property: "og:description", content: "Free internet tools platform for Morocco." },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: `${SITE_URL}/about` },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/about` }],
   }),
   component: About,
 });

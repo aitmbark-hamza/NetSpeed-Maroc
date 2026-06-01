@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { SITE_URL } from "@/lib/config";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -15,9 +16,9 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Get in touch with the NetSpeed Maroc team. Questions, partnerships and feedback welcome." },
       { property: "og:title", content: "Contact NetSpeed Maroc" },
       { property: "og:description", content: "Get in touch with our team." },
-      { property: "og:url", content: "/contact" },
+      { property: "og:url", content: `${SITE_URL}/contact` },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/contact` }],
   }),
   component: Contact,
 });
